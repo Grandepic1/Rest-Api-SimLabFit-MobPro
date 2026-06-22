@@ -39,8 +39,8 @@ Project ini memakai SQLAlchemy async di folder `app/database/`.
 
 Default database memakai konfigurasi di `.env`. Untuk development cepat, ubah `DATABASE=sqlite`.
 ```
-cp .env
-
+cp .env.example .env
+```
 ## Migration
 
 Project ini sudah memakai Alembic dan punya migration awal untuk table `users`.
