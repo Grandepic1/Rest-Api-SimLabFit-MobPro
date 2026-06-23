@@ -22,38 +22,38 @@ def upgrade() -> None:
     op.create_table(
         "dosen_matakuliah",
         sa.Column(
-            "dosen_id",
+            "idDosen",
             sa.Integer(),
             sa.ForeignKey("dosen.id", ondelete="CASCADE"),
             nullable=False,
         ),
         sa.Column(
-            "matakuliah_id",
+            "idMataKuliah",
             sa.Integer(),
             sa.ForeignKey("matakuliah.id", ondelete="CASCADE"),
             nullable=False,
         ),
         sa.PrimaryKeyConstraint(
-            "dosen_id",
-            "matakuliah_id",
+            "idDosen",
+            "idMataKuliah",
             name="pk_dosen_matakuliah",
         ),
     )
 
     op.create_index(
-        "ix_dosen_matakuliah_dosen_id",
+        "ix_dosen_matakuliah_idDosen",
         "dosen_matakuliah",
-        ["dosen_id"],
+        ["idDosen"],
     )
 
     op.create_index(
-        "ix_dosen_matakuliah_matakuliah_id",
+        "ix_dosen_matakuliah_idMataKuliah",
         "dosen_matakuliah",
-        ["matakuliah_id"],
+        ["idMataKuliah"],
     )
 
 
 def downgrade() -> None:
-    op.drop_index("ix_dosen_matakuliah_matakuliah_id", table_name="dosen_matakuliah")
-    op.drop_index("ix_dosen_matakuliah_dosen_id", table_name="dosen_matakuliah")
+    op.drop_index("ix_dosen_matakuliah_idMataKuliah", table_name="dosen_matakuliah")
+    op.drop_index("ix_dosen_matakuliah_idDosen", table_name="dosen_matakuliah")
     op.drop_table("dosen_matakuliah")
