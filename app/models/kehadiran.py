@@ -33,6 +33,8 @@ class Kehadiran(Base):
     ruangan: Mapped[str] = mapped_column(String(255), nullable=False)
     modul: Mapped[str] = mapped_column(String(255), nullable=False)
     kelas: Mapped[str] = mapped_column(String(255), nullable=False)
+    googleId: Mapped[str] = mapped_column(String(255), nullable=False)
+    photoUrl: Mapped[str | None] = mapped_column(String(255), nullable=True)
     isDeleted: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     dosen: Mapped["Dosen"] = relationship("Dosen", back_populates="kehadiran")

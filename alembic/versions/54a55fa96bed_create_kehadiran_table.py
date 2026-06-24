@@ -30,6 +30,8 @@ def upgrade() -> None:
         sa.Column("modul", sa.String(length=255), nullable=False),
         sa.Column("kelas", sa.String(length=255), nullable=False),
         sa.Column("isDeleted", sa.Boolean(), nullable=False, server_default=sa.false()),
+        sa.Column("googleId", sa.String(length=255), nullable=False),
+        sa.Column("photoUrl", sa.String(length=255), nullable=True),
         sa.ForeignKeyConstraint(["idDosen"], ["dosen.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(["idMataKuliah"], ["matakuliah.id"], ondelete="CASCADE"),
     )
