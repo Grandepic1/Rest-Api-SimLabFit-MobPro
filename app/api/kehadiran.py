@@ -92,7 +92,15 @@ async def get_kehadiran(
 @router.put("/{kehadiran_id}", response_model=KehadiranRead)
 async def update_kehadiran(
     kehadiran_id: int,
-    payload: KehadiranUpdate,
+    idDosen: int = Form(...),
+    idMataKuliah: int = Form(...),
+    tanggal: date = Form(...),
+    jamAwal: time = Form(...),
+    jamAkhir: time = Form(...),
+    ruangan: str = Form(..., min_length=1, max_length=255),
+    modul: str = Form(..., min_length=1, max_length=255),
+    kelas: str = Form(..., min_length=1, max_length=255),
+    image: UploadFile | None = File(default=None),
     authorization: str = Header(...),
     db: AsyncSession = Depends(get_db),
 ):
@@ -103,7 +111,28 @@ async def update_kehadiran(
     )
     if kehadiran is None:
         raise HTTPException(status_code=404, detail="Kehadiran not found")
-    payload.googleId = authorization
+
+    dosen = await crud_dosen.get_dosen(db, idDosen)
+    matakuliah = await crud_matakuliah.get_matakuliah(db, idMataKuliah)
+    if dosen is None or matakuliah is None:
+        raise HTTPException(status_code=404, detail="Dosen or matakuliah not found")
+
+    payload_data = {
+        "idDosen": idDosen,
+        "idMataKuliah": idMataKuliah,
+        "tanggal": tanggal,
+        "jamAwal": jamAwal,
+        "jamAkhir": jamAkhir,
+        "ruangan": ruangan,
+        "modul": modul,
+        "kelas": kelas,
+        "googleId": authorization,
+    }
+    photo_url = await save_image(image)
+    if photo_url is not None:
+        payload_data["photoUrl"] = photo_url
+
+    payload = KehadiranUpdate(**payload_data)
     return await crud_kehadiran.update_kehadiran(db, kehadiran, payload)
 
 
